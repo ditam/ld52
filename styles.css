@@ -1,0 +1,50 @@
+body {
+  background-color: rgb(43, 38, 38);
+}
+
+body.red {
+  cursor: url(cursor-red.png) 16 16, pointer;
+}
+body.green {
+  cursor: url(cursor-green.png) 16 16, pointer;
+}
+body.blue {
+  cursor: url(cursor-blue.png) 16 16, pointer;
+}
+
+#picker {
+  position: absolute;
+  left: 250px;
+  top: 150px;
+  width: 25px;
+  height: 25px;
+}
+
+/* picker shows the next color */
+body.red #picker {
+  background-color: green;
+}
+body.green #picker {
+  background-color: blue;
+}
+body.blue #picker {
+  background-color: red;
+}
+
+#container {
+  margin: auto;
+  width: 400px;
+  height: 200px;
+  padding-top: 200px;
+}
+
+.cell {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  background-color: rgb(100, 100, 100);
+}
+
+.cell:hover {
+  background-color: white;
+}
