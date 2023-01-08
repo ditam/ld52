@@ -9,14 +9,27 @@ const map = [];
 
 let body, container, picker;
 
+// TODO: keep in sync with CSS - apply CSS rules dynamically?
+// TODO: use color objects, with readable name and CSS color codes
+const colors = ['red', 'green', 'blue'];
+
 function getCurrentColor() {
-  if (body.hasClass('red')) {
-    return 'red';
-  } else if (body.hasClass('green')) {
-    return 'green';
-  } else {
-    return 'blue';
-  }
+  return colors.filter(color => body.hasClass(color))[0];
+}
+
+function switchToNextColor() {
+  const currentColor = getCurrentColor();
+  const currentIndex = colors.findIndex(color => {
+    return color === currentColor;
+  });
+
+  console.assert(body.hasClass(currentColor), 'Invalid current color state');
+  console.assert(colors[currentIndex] === currentColor, 'Color index error');
+
+  body.removeClass(currentColor);
+
+  const nextIndex = (currentIndex + 1) % (colors.length);
+  body.addClass(colors[nextIndex]);
 }
 
 function generate() {
@@ -51,19 +64,7 @@ $(document).ready(function() {
   container = $('#container');
   picker = $('#picker');
 
-  picker.on('click', function() {
-    console.log('picker click!');
-    if (body.hasClass('green')) {
-      body.removeClass('green');
-      body.addClass('blue');
-    } else if (body.hasClass('blue')) {
-      body.removeClass('blue');
-      body.addClass('red');
-    } else if (body.hasClass('red')) {
-      body.removeClass('red');
-      body.addClass('green');
-    }
-  });
+  picker.on('click', switchToNextColor);
 
   generate();
 });
