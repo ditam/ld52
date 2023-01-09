@@ -26,10 +26,10 @@ let body, container, picker;
 let bgMusic;
 const sounds = {};
 
-// These colors are available in the picker. Other colors (e.g. black, gold) can be valid, but not pickable.
+// These colors are available in the picker. Other colors (e.g. transparent, gold) can be valid, but not pickable.
 // TODO: keep in sync with CSS - apply CSS rules dynamically?
 // TODO: use color objects, with readable name and CSS color codes
-const colors = ['red', 'green', 'blue', 'brown', 'gray'];
+const colors = ['red', 'green', 'blue', 'sienna', 'gray'];
 
 function deepCopy(o) {
   return JSON.parse(JSON.stringify(o));
@@ -102,7 +102,7 @@ function generate() {
       const cell = {
         rowIndex: i,
         cellIndex: j,
-        color: 'black',
+        color: 'transparent',
         el: cellEl // NB: this is why the map can not be deep copied naively
       };
       row.push(cell);
@@ -126,7 +126,7 @@ function generate() {
 }
 
 function checkComplete() {
-  const isCellFilled = (c) => c.color !== 'black';
+  const isCellFilled = (c) => c.color !== 'transparent';
   const isRowFilled = (r) => r.every(isCellFilled);
   const complete = map.every(isRowFilled);
   if (complete) {
@@ -178,7 +178,7 @@ function applyMapChanges(mapChanges) {
       const cell = map[i][j];
       const change = mapChanges[i][j];
       if (change.deletion === true) {
-        cell.color = 'black';
+        cell.color = 'transparent';
       } else if (change.ripens === true) {
         cell.color = 'gold';
       }
@@ -211,7 +211,7 @@ async function harvest() {
   await delay(500);
   mapChanges = getClearChangeset();
   forEachCellOfType('blue', c => {
-    if (countNeighboursOfType(c, 'brown') < 1) {
+    if (countNeighboursOfType(c, 'sienna') < 1) {
       mapChanges[c.rowIndex][c.cellIndex] = {
         deletion: true
       };
@@ -315,8 +315,8 @@ $(document).ready(function() {
     generate();
 
     picker.css({
-      top: '100px',
-      left: '210px'
+      top: '130px',
+      left: '225px'
     });
 
     // all subsequent clicks will just toggle color

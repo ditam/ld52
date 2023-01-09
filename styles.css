@@ -15,7 +15,7 @@ body.green {
 body.blue {
   cursor: url(cursor-blue.png) 8 8, pointer;
 }
-body.brown {
+body.sienna {
   cursor: url(cursor-brown.png) 8 8, pointer;
 }
 body.gray {
@@ -28,29 +28,37 @@ body.loading {
 
 #picker {
   position: absolute;
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
   cursor: url(cursor-picker.png) 8 8, pointer;
+  border: 1px solid #b380340a;
+
   /* shows the next color - set by JS, starts on green */
   background-color: rgb(21, 152, 6);
 
   transition: top 0.7s, left 0.7s, background-color 0.1s;
 }
 
+#picker:hover {
+  border: 1px solid #b3803465;
+}
+
 #container {
-  margin: auto;
-  width: 400px;
-  height: 200px;
-  padding-top: 200px;
+  position: absolute;
+  top: 200px;
+  left: 225px;
 }
 
 .cell {
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 35px;
   display: inline-block;
-  background-color: rgb(100, 100, 100);
+  border: 1px solid #d5a2224d;
+  margin-right: 8px;
+  margin-bottom: 8px;
 }
 
 .cell:hover {
-  background-color: white;
+  background-color: #b3803440;
+  border-color: #997447;
 }
