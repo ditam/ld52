@@ -45,8 +45,7 @@ body.loading {
 
 #container {
   position: absolute;
-  top: 200px;
-  left: 225px;
+  /* top and left from JS */
 }
 
 .cell {

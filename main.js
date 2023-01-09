@@ -314,9 +314,17 @@ $(document).ready(function() {
     picker.css('background-color', 'blue');
     generate();
 
+    const verticalCenter = body.innerHeight() / 2;
+    const horizontalCenter = body.innerWidth() / 2;
+
     picker.css({
-      top: '130px',
-      left: '225px'
+      top: (verticalCenter - 150) + 'px',
+      left: (horizontalCenter - 200) + 'px'
+    });
+
+    container.css({
+      top: (verticalCenter - 75) + 'px',
+      left: (horizontalCenter - 200) + 'px'
     });
 
     // all subsequent clicks will just toggle color
