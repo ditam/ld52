@@ -4,16 +4,16 @@ const HEIGHT = 500;
 
 const levels = [
   {
-    COLS: 3,
     ROWS: 3,
+    COLS: 3,
     SCORE: 4
   }, {
-    COLS: 5,
     ROWS: 4,
+    COLS: 5,
     SCORE: 10
   }, {
-    COLS: 7,
     ROWS: 4,
+    COLS: 7,
     SCORE: 20
   }
 ];
@@ -22,7 +22,7 @@ let currentLevel = 0;
 
 const map = [];
 
-let body, container, picker;
+let body, container, picker, targetScore;
 let bgMusic;
 const sounds = {};
 
@@ -122,6 +122,9 @@ function generate() {
     }
     map.push(row);
   }
+
+  targetScore.html(levels[currentLevel].SCORE);
+
   console.log('done:', map);
 }
 
@@ -279,6 +282,7 @@ $(document).ready(function() {
   body = $('body');
   container = $('#container');
   picker = $('#picker');
+  targetScore = $('#target-score');
 
   picker.css({
     top: (body.innerHeight() / 2 - 13) + 'px',
@@ -325,6 +329,13 @@ $(document).ready(function() {
     container.css({
       top: (verticalCenter - 75) + 'px',
       left: (horizontalCenter - 200) + 'px'
+    });
+
+    const row = $('.row');
+    targetScore.css({
+      top: (verticalCenter - 150) + 5 + 'px',
+      // container left + row width - font size
+      left: (horizontalCenter - 200) + row.width() - 32 + 'px'
     });
 
     // all subsequent clicks will just toggle color

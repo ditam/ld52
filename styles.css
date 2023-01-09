@@ -48,6 +48,16 @@ body.loading {
   /* top and left from JS */
 }
 
+#target-score {
+  position: absolute;
+  /* top and left from JS */
+
+  color: gold;
+  font-size: 32px;
+  padding: 4px;
+  font-family: 'Prata', serif;
+}
+
 .cell {
   width: 35px;
   height: 35px;
