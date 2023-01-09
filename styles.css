@@ -3,19 +3,19 @@ body {
 }
 
 body.red {
-  cursor: url(cursor-red.png) 16 16, pointer;
+  cursor: url(cursor-red.png) 8 8, pointer;
 }
 body.green {
-  cursor: url(cursor-green.png) 16 16, pointer;
+  cursor: url(cursor-green.png) 8 8, pointer;
 }
 body.blue {
-  cursor: url(cursor-blue.png) 16 16, pointer;
+  cursor: url(cursor-blue.png) 8 8, pointer;
 }
 body.brown {
-  cursor: url(cursor-brown.png) 16 16, pointer;
+  cursor: url(cursor-brown.png) 8 8, pointer;
 }
 body.gray {
-  cursor: url(cursor-gray.png) 16 16, pointer;
+  cursor: url(cursor-gray.png) 8 8, pointer;
 }
 
 #picker {
