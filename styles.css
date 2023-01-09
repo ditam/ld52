@@ -1,5 +1,9 @@
 body {
-  background-color: rgb(43, 38, 38);
+  background: rgb(4,32,37);
+  background: linear-gradient(126deg, rgba(4,32,37,1) 0%, rgba(4,9,50,1) 66%, rgba(2,0,22,1) 100%);
+
+  /* initial cursor until the game starts */
+  cursor: url(cursor-picker.png) 8 8, pointer;
 }
 
 body.red {
@@ -19,18 +23,18 @@ body.gray {
 }
 
 body.loading {
-  cursor: wait;
+  cursor: url(cursor-loading.png) 8 8, pointer;
 }
 
 #picker {
   position: absolute;
-  left: 250px;
-  top: 150px;
   width: 25px;
   height: 25px;
   cursor: url(cursor-picker.png) 8 8, pointer;
-  /* shows the next color - set by JS, starts on blue */
-  background-color: rgb(0, 0, 240);
+  /* shows the next color - set by JS, starts on green */
+  background-color: rgb(21, 152, 6);
+
+  transition: top 0.7s, left 0.7s, background-color 0.1s;
 }
 
 #container {

@@ -23,6 +23,7 @@ let currentLevel = 0;
 const map = [];
 
 let body, container, picker;
+let bgMusic;
 
 // These colors are available in the picker. Other colors (e.g. black, gold) can be valid, but not pickable.
 // TODO: keep in sync with CSS - apply CSS rules dynamically?
@@ -55,8 +56,6 @@ function switchToNextColor() {
   const nextIndex = (currentIndex + 1) % (colors.length);
   const nextColor = colors[nextIndex];
   body.addClass(nextColor);
-
-  console.log('Color is now:', nextColor);
 
   // picker shows the upcoming color
   const nextNextIndex = (nextIndex + 1) % (colors.length);
@@ -250,14 +249,44 @@ async function harvest() {
   body.removeClass('loading');
 }
 
+let DEBUG = location && location.hostname==='localhost';
 $(document).ready(function() {
-  console.log('Hello H');
-
   body = $('body');
   container = $('#container');
   picker = $('#picker');
 
-  picker.on('click', switchToNextColor);
+  picker.css({
+    top: (body.innerHeight() / 2 - 13) + 'px',
+    left: (body.innerWidth() / 2 - 13) + 'px'
+  });
 
-  generate();
+  bgMusic = new Audio('music_01.mp3');
+  bgMusic.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+  }, false);
+
+  // This is mostly just to unlock the fullscreen request and audio APIs via user interaction,
+  // but it might also look cool, and it teaches the color pick mechanic.
+  picker.one('click', () => {
+    console.log('starting');
+
+    if (!DEBUG) {
+      document.documentElement.requestFullscreen();
+    }
+
+    bgMusic.play();
+
+    body.addClass('green');
+    picker.css('background-color', 'blue');
+    generate();
+
+    picker.css({
+      top: '100px',
+      left: '210px'
+    });
+
+    // all subsequent clicks will just toggle color
+    picker.on('click', switchToNextColor);
+  });
 });
