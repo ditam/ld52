@@ -2,8 +2,23 @@
 const WIDTH = 800;
 const HEIGHT = 500;
 
-const ROWS = 3;
-const COLS = 3;
+const levels = [
+  {
+    COLS: 3,
+    ROWS: 3,
+    SCORE: 4
+  }, {
+    COLS: 5,
+    ROWS: 4,
+    SCORE: 10
+  }, {
+    COLS: 7,
+    ROWS: 4,
+    SCORE: 20
+  }
+];
+
+let currentLevel = 0;
 
 const map = [];
 
@@ -49,10 +64,20 @@ function switchToNextColor() {
 }
 
 function generate() {
-  for (let i=0; i<ROWS; i++) {
+  // delete any existing map
+  map.forEach(row => {
+    row.forEach(cell => {
+      cell.el.remove();
+    });
+  });
+  // empty array (truncating because const)
+  map.length = 0;
+
+  // generate map of current level
+  for (let i=0; i<levels[currentLevel].ROWS; i++) {
     const row = [];
     const rowEl = $('<div></div>').addClass('row').appendTo(container);
-    for (let j=0; j<COLS; j++) {
+    for (let j=0; j<levels[currentLevel].COLS; j++) {
       const cellEl = $('<div></div>').addClass('cell').appendTo(rowEl);
       const cell = {
         rowIndex: i,
@@ -98,17 +123,17 @@ function forEachCellOfType(type, fn) {
   });
 }
 
-function countNeighboursOfType(targetCell, type) {
+function countNeighboursOfType(targetCell, type, range = 1) {
   const neighbours = [];
 
-  for (let i=0; i<ROWS; i++) {
+  for (let i=0; i<levels[currentLevel].ROWS; i++) {
     const row = map[i];
-    for (let j=0; j<COLS; j++) {
+    for (let j=0; j<levels[currentLevel].COLS; j++) {
       const cell = row[j];
       if (
         targetCell !== cell && // not neighbouring self
-        (Math.abs(targetCell.rowIndex - i) <= 1) &&
-        (Math.abs(targetCell.cellIndex - j) <= 1)
+        (Math.abs(targetCell.rowIndex - i) <= range) &&
+        (Math.abs(targetCell.cellIndex - j) <= range)
       ) {
         neighbours.push(cell);
       }
@@ -127,8 +152,8 @@ function countNeighboursOfType(targetCell, type) {
 
 // TODO: async delays to apply UI effects
 function applyMapChanges(mapChanges) {
-  for (let i=0; i<ROWS; i++) {
-    for (let j=0; j<COLS; j++) {
+  for (let i=0; i<levels[currentLevel].ROWS; i++) {
+    for (let j=0; j<levels[currentLevel].COLS; j++) {
       const cell = map[i][j];
       const change = mapChanges[i][j];
       if (change.deletion === true) {
@@ -149,9 +174,9 @@ async function harvest() {
   let mapChanges;
   function getClearChangeset() {
     let changeSet = [];
-    for (let i=0; i<ROWS; i++) {
+    for (let i=0; i<levels[currentLevel].ROWS; i++) {
       const row = [];
-      for (let j=0; j<COLS; j++) {
+      for (let j=0; j<levels[currentLevel].COLS; j++) {
         const cell = {};
         row.push(cell);
       }
@@ -207,8 +232,21 @@ async function harvest() {
   });
   applyMapChanges(mapChanges);
 
-  // TODO: show score, delay, and reset or load new level
-  //       (we need to empty the map, otherwise fill will be detected almost immediately again)
+  // TODO: fade or delete non-wheat tiles for visible score
+  // TODO: show score
+
+  // score check (score is the remaining wheat)
+  await delay(500);
+  if (countNeighboursOfType(map[0][0], 'gold', 1000) >= levels[currentLevel].SCORE) {
+    // increment level if possible
+    if (levels[currentLevel + 1]) {
+      currentLevel = currentLevel + 1;
+    }
+    // TODO: else: congrats
+  }
+
+  generate();
+
   body.removeClass('loading');
 }
 
