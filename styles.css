@@ -11,6 +11,12 @@ body.green {
 body.blue {
   cursor: url(cursor-blue.png) 16 16, pointer;
 }
+body.brown {
+  cursor: url(cursor-brown.png) 16 16, pointer;
+}
+body.gray {
+  cursor: url(cursor-gray.png) 16 16, pointer;
+}
 
 #picker {
   position: absolute;
@@ -18,17 +24,8 @@ body.blue {
   top: 150px;
   width: 25px;
   height: 25px;
-}
-
-/* picker shows the next color */
-body.red #picker {
-  background-color: green;
-}
-body.green #picker {
-  background-color: blue;
-}
-body.blue #picker {
-  background-color: red;
+  /* shows the next color - set by JS, starts on blue */
+  background-color: rgb(0, 0, 240);
 }
 
 #container {
