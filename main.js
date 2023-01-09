@@ -190,6 +190,10 @@ function applyMapChanges(mapChanges) {
   }
 }
 
+function getRandomIntFromInterval(min, max) { // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 async function harvest() {
   console.log('starting harvest...');
   body.addClass('loading');
@@ -210,6 +214,22 @@ async function harvest() {
   }
 
   // === Apply harvest rules stage by stage. ===
+  // if there are not enough pests for the map size, they are placed randomly
+  await delay(500);
+  mapChanges = getClearChangeset();
+  const mapSize = levels[currentLevel].ROWS * levels[currentLevel].COLS;
+  if (countNeighboursOfType(map[0][0], 'red', 1000) < mapSize/10) {
+    const pestCount = Math.floor(mapSize/10);
+    for (let i=0;i<pestCount;i++) {
+      const x = getRandomIntFromInterval(0, levels[currentLevel].ROWS);
+      const y = getRandomIntFromInterval(0, levels[currentLevel].COLS);
+      mapChanges[x][y] = {
+        deletion: true
+      };
+    }
+  }
+  applyMapChanges(mapChanges);
+
   // water not next to ground seeps away
   await delay(500);
   mapChanges = getClearChangeset();
@@ -241,6 +261,18 @@ async function harvest() {
     mapChanges[c.rowIndex][c.cellIndex] = {
       ripens: true
     };
+  });
+  applyMapChanges(mapChanges);
+
+  // wheat next to pests is eaten
+  await delay(500);
+  mapChanges = getClearChangeset();
+  forEachCellOfType('gold', c => {
+    if (countNeighboursOfType(c, 'red') > 0) {
+      mapChanges[c.rowIndex][c.cellIndex] = {
+        deletion: true
+      };
+    }
   });
   applyMapChanges(mapChanges);
 
