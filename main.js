@@ -3,7 +3,7 @@ const WIDTH = 800;
 const HEIGHT = 500;
 
 const ROWS = 3;
-const COLS = 5;
+const COLS = 3;
 
 const map = [];
 
@@ -16,6 +16,10 @@ const colors = ['red', 'green', 'blue', 'brown', 'gray'];
 
 function deepCopy(o) {
   return JSON.parse(JSON.stringify(o));
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function getCurrentColor() {
@@ -60,6 +64,9 @@ function generate() {
 
       // when clicked, it is painted, and the color is updated in the map representation
       cellEl.on('click', () => {
+        if (body.hasClass('loading')) {
+          return;
+        }
         const color = getCurrentColor();
         cellEl.css('background-color', color);
         cell.color = color;
@@ -76,7 +83,6 @@ function checkComplete() {
   const isCellFilled = (c) => c.color !== 'black';
   const isRowFilled = (r) => r.every(isCellFilled);
   const complete = map.every(isRowFilled);
-  console.log('Complete:', complete);
   if (complete) {
     harvest();
   }
@@ -135,8 +141,9 @@ function applyMapChanges(mapChanges) {
   }
 }
 
-function harvest() {
-  // TODO: blockInteractions
+async function harvest() {
+  console.log('starting harvest...');
+  body.addClass('loading');
 
   // to mutate the map in stages, we keep track of the new state, we do not modify during scanning
   let mapChanges;
@@ -155,6 +162,7 @@ function harvest() {
 
   // === Apply harvest rules stage by stage. ===
   // water not next to ground seeps away
+  await delay(500);
   mapChanges = getClearChangeset();
   forEachCellOfType('blue', c => {
     if (countNeighboursOfType(c, 'brown') < 1) {
@@ -166,6 +174,7 @@ function harvest() {
   applyMapChanges(mapChanges);
 
   // plants not next to water wither
+  await delay(500);
   mapChanges = getClearChangeset();
   forEachCellOfType('green', c => {
     if (countNeighboursOfType(c, 'blue') < 1) {
@@ -177,6 +186,7 @@ function harvest() {
   applyMapChanges(mapChanges);
 
   // remaining plants turn to wheat
+  await delay(500);
   mapChanges = getClearChangeset();
   forEachCellOfType('green', c => {
     mapChanges[c.rowIndex][c.cellIndex] = {
@@ -186,6 +196,7 @@ function harvest() {
   applyMapChanges(mapChanges);
 
   // wheat not in range of harvesters is discarded
+  await delay(500);
   mapChanges = getClearChangeset();
   forEachCellOfType('gold', c => {
     if (countNeighboursOfType(c, 'gray', 2) < 1) {
@@ -196,7 +207,9 @@ function harvest() {
   });
   applyMapChanges(mapChanges);
 
-  // TODO: unblock interactions
+  // TODO: show score, delay, and reset or load new level
+  //       (we need to empty the map, otherwise fill will be detected almost immediately again)
+  body.removeClass('loading');
 }
 
 $(document).ready(function() {

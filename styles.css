@@ -18,6 +18,10 @@ body.gray {
   cursor: url(cursor-gray.png) 8 8, pointer;
 }
 
+body.loading {
+  cursor: wait;
+}
+
 #picker {
   position: absolute;
   left: 250px;
