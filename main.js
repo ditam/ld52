@@ -24,6 +24,7 @@ const map = [];
 
 let body, container, picker;
 let bgMusic;
+const sounds = {};
 
 // These colors are available in the picker. Other colors (e.g. black, gold) can be valid, but not pickable.
 // TODO: keep in sync with CSS - apply CSS rules dynamically?
@@ -42,7 +43,25 @@ function getCurrentColor() {
   return colors.filter(color => body.hasClass(color))[0];
 }
 
+let clickCount = 0;
+function playClickSound() {
+  const clicks = [
+    sounds.click01,
+    sounds.click02,
+    sounds.click03,
+    sounds.click03,
+    sounds.click02,
+    sounds.click01
+  ];
+  clicks[clickCount % clicks.length].play();
+  clickCount++;
+}
+
 function switchToNextColor() {
+  if (body.hasClass('loading')) {
+    return;
+  }
+
   const currentColor = getCurrentColor();
   const currentIndex = colors.findIndex(color => {
     return color === currentColor;
@@ -60,6 +79,8 @@ function switchToNextColor() {
   // picker shows the upcoming color
   const nextNextIndex = (nextIndex + 1) % (colors.length);
   picker.css('background-color', colors[nextNextIndex]);
+
+  sounds.toggle.play();
 }
 
 function generate() {
@@ -91,6 +112,7 @@ function generate() {
         if (body.hasClass('loading')) {
           return;
         }
+        playClickSound();
         const color = getCurrentColor();
         cellEl.css('background-color', color);
         cell.color = color;
@@ -241,7 +263,10 @@ async function harvest() {
     if (levels[currentLevel + 1]) {
       currentLevel = currentLevel + 1;
     }
+    sounds.success.play();
     // TODO: else: congrats
+  } else {
+    sounds.failure.play();
   }
 
   generate();
@@ -260,11 +285,19 @@ $(document).ready(function() {
     left: (body.innerWidth() / 2 - 13) + 'px'
   });
 
+  // initialize audio assets
   bgMusic = new Audio('music_01.mp3');
   bgMusic.addEventListener('ended', function() {
     this.currentTime = 0;
     this.play();
   }, false);
+
+  sounds.click01 = new Audio('sound_01.mp3');
+  sounds.click02 = new Audio('sound_02.mp3');
+  sounds.click03 = new Audio('sound_03.mp3');
+  sounds.toggle = new Audio('sound_toggle.mp3');
+  sounds.success = new Audio('sound_success.mp3');
+  sounds.failure = new Audio('sound_failure.mp3');
 
   // This is mostly just to unlock the fullscreen request and audio APIs via user interaction,
   // but it might also look cool, and it teaches the color pick mechanic.

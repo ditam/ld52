@@ -1,2 +1,9 @@
 Music based on Contemplation by Joth on OpenGameArt.org
 https://opengameart.org/content/contemplation-0
+
+Sound effects based on:
+GUI Sound effects by Lokif
+https://opengameart.org/content/gui-sound-effects
+and
+Interface Beeps by bart
+https://opengameart.org/content/interface-beeps
