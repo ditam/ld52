@@ -184,6 +184,8 @@ function applyMapChanges(mapChanges) {
         cell.color = 'transparent';
       } else if (change.ripens === true) {
         cell.color = 'gold';
+      } else if (change.pests === true) {
+        cell.color = 'red';
       }
       cell.el.css('background-color', cell.color);
     }
@@ -224,7 +226,7 @@ async function harvest() {
       const x = getRandomIntFromInterval(0, levels[currentLevel].ROWS);
       const y = getRandomIntFromInterval(0, levels[currentLevel].COLS);
       mapChanges[x][y] = {
-        deletion: true
+        pests: true
       };
     }
   }
