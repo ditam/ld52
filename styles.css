@@ -71,3 +71,26 @@ body.loading {
   background-color: #b3803440;
   border-color: #997447;
 }
+
+
+.flair {
+  overflow: hidden;
+  position: relative;
+}
+.flair:after {
+  background: #fff;
+  content: "";
+  height: 155px;
+  left: -75px;
+  opacity: 0.1;
+  position: absolute;
+  top: -50px;
+  transform: rotate(35deg);
+  transition: all 420ms cubic-bezier(0.2, 1, 0.2, 1);
+  width: 50px;
+  z-index: -1;
+}
+.flair:hover:after {
+  left: 150%;
+  transition: all 250ms cubic-bezier(0.2, 1, 0.2, 1);
+}

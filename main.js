@@ -102,7 +102,7 @@ function generate() {
     const row = [];
     const rowEl = $('<div></div>').addClass('row').appendTo(container);
     for (let j=0; j<levels[currentLevel].COLS; j++) {
-      const cellEl = $('<div></div>').addClass('cell').appendTo(rowEl);
+      const cellEl = $('<div></div>').addClass('cell flair').appendTo(rowEl);
       const cell = {
         rowIndex: i,
         cellIndex: j,
