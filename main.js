@@ -10,11 +10,15 @@ const levels = [
   }, {
     ROWS: 4,
     COLS: 5,
-    SCORE: 10
+    SCORE: 8
   }, {
     ROWS: 4,
-    COLS: 7,
-    SCORE: 20
+    COLS: 8,
+    SCORE: 15
+  }, {
+    ROWS: 5,
+    COLS: 10,
+    SCORE: 25
   }
 ];
 
@@ -222,9 +226,15 @@ async function harvest() {
   const mapSize = levels[currentLevel].ROWS * levels[currentLevel].COLS;
   if (countNeighboursOfType(map[0][0], 'red', 1000) < mapSize/10) {
     const pestCount = Math.floor(mapSize/10);
+    const previousPests = {}; // lookup ht for duplicate detection
     for (let i=0;i<pestCount;i++) {
-      const x = getRandomIntFromInterval(0, levels[currentLevel].ROWS);
-      const y = getRandomIntFromInterval(0, levels[currentLevel].COLS);
+      let x;
+      let y;
+      do {
+        x = getRandomIntFromInterval(0, levels[currentLevel].ROWS - 1);
+        y = getRandomIntFromInterval(0, levels[currentLevel].COLS - 1);
+      } while (previousPests[x + '|' + y])
+      previousPests[x + '|' + y] = true;
       mapChanges[x][y] = {
         pests: true
       };
