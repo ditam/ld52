@@ -127,7 +127,10 @@ function generate() {
     map.push(row);
   }
 
-  targetScore.html(levels[currentLevel].SCORE);
+  targetScore.empty();
+  for(let s=0; s<levels[currentLevel].SCORE; s++) {
+    $('<div></div>').addClass('score-cell').appendTo(targetScore);
+  }
 
   console.log('done:', map);
 }
@@ -300,12 +303,16 @@ async function harvest() {
   });
   applyMapChanges(mapChanges);
 
+  // display score
+  const score = countNeighboursOfType(map[0][0], 'gold', 1000);
+  $('.score-cell').slice(0, score).addClass('filled');
+  await delay(700);
+
   // TODO: fade or delete non-wheat tiles for visible score
-  // TODO: show score
 
   // score check (score is the remaining wheat)
   await delay(500);
-  if (countNeighboursOfType(map[0][0], 'gold', 1000) >= levels[currentLevel].SCORE) {
+  if (score >= levels[currentLevel].SCORE) {
     // increment level if possible
     if (levels[currentLevel + 1]) {
       currentLevel = currentLevel + 1;
@@ -377,9 +384,8 @@ $(document).ready(function() {
 
     const row = $('.row');
     targetScore.css({
-      top: (verticalCenter - 150) + 5 + 'px',
-      // container left + row width - font size
-      left: (horizontalCenter - 200) + row.width() - 32 + 'px'
+      top: (verticalCenter - 150) + 'px',
+      left: (horizontalCenter - 200) + 45 + 'px'
     });
 
     // all subsequent clicks will just toggle color
