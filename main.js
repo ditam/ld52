@@ -154,6 +154,7 @@ function forEachCellOfType(type, fn) {
   });
 }
 
+// NB: strictly for neighbors, does not count self
 function countNeighboursOfType(targetCell, type, range = 1) {
   const neighbours = [];
 
@@ -178,6 +179,20 @@ function countNeighboursOfType(targetCell, type, range = 1) {
     }
   });
 
+  return count;
+}
+
+function countType(type) {
+  let count = 0;
+  for (let i=0; i<levels[currentLevel].ROWS; i++) {
+    const row = map[i];
+    for (let j=0; j<levels[currentLevel].COLS; j++) {
+      const cell = row[j];
+      if (cell.color === type) {
+        count++;
+      }
+    }
+  }
   return count;
 }
 
@@ -227,10 +242,10 @@ async function harvest() {
   await delay(500);
   mapChanges = getClearChangeset();
   const mapSize = levels[currentLevel].ROWS * levels[currentLevel].COLS;
-  if (countNeighboursOfType(map[0][0], 'red', 1000) < mapSize/10) {
-    const pestCount = Math.floor(mapSize/10);
+  if (countType('red') < mapSize / 10) {
+    const pestCount = Math.floor(mapSize / 10);
     const previousPests = {}; // lookup ht for duplicate detection
-    for (let i=0;i<pestCount;i++) {
+    for (let i=0; i<pestCount; i++) {
       let x;
       let y;
       do {
@@ -304,7 +319,7 @@ async function harvest() {
   applyMapChanges(mapChanges);
 
   // display score
-  const score = countNeighboursOfType(map[0][0], 'gold', 1000);
+  const score = countType('gold');
   $('.score-cell').slice(0, score).addClass('filled');
   await delay(700);
 
