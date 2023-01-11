@@ -6,6 +6,10 @@ html {
 }
 
 body {
+  /* The above FF hack would mess with the cursor rules if this is not stretched. */
+  width: 100vw;
+  height: 100vh;
+
   background: rgb(4,32,37);
   background: linear-gradient(126deg, rgba(4,32,37,1) 0%, rgba(4,9,50,1) 66%, rgba(2,0,22,1) 100%);
 
