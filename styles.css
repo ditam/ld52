@@ -1,3 +1,10 @@
+html {
+  /* There's a weird bug in Firefox where the linear-gradient bg of body is not displayed
+     without explicit sizing here (probably because of no sized visible content?) */
+  min-height: 100%;
+  min-width: 100%;
+}
+
 body {
   background: rgb(4,32,37);
   background: linear-gradient(126deg, rgba(4,32,37,1) 0%, rgba(4,9,50,1) 66%, rgba(2,0,22,1) 100%);

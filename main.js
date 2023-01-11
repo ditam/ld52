@@ -351,8 +351,8 @@ $(document).ready(function() {
   targetScore = $('#target-score');
 
   picker.css({
-    top: (body.innerHeight() / 2 - 13) + 'px',
-    left: (body.innerWidth() / 2 - 13) + 'px'
+    top: (document.documentElement.clientHeight / 2 - 13) + 'px',
+    left: (document.documentElement.clientWidth / 2 - 13) + 'px'
   });
 
   // initialize audio assets
@@ -384,8 +384,8 @@ $(document).ready(function() {
     picker.css('background-color', 'blue');
     generate();
 
-    const verticalCenter = body.innerHeight() / 2;
-    const horizontalCenter = body.innerWidth() / 2;
+    const verticalCenter = document.documentElement.clientHeight / 2;
+    const horizontalCenter = document.documentElement.clientWidth / 2;
 
     picker.css({
       top: (verticalCenter - 150) + 'px',
