@@ -33,7 +33,7 @@ const sounds = {};
 // These colors are available in the picker. Other colors (e.g. transparent, gold) can be valid, but not pickable.
 // TODO: keep in sync with CSS - apply CSS rules dynamically?
 // TODO: use color objects, with readable name and CSS color codes
-const colors = ['red', 'green', 'blue', 'sienna', 'gray'];
+const colors = ['green', 'blue', 'sienna', 'gray'];
 
 function deepCopy(o) {
   return JSON.parse(JSON.stringify(o));
@@ -331,6 +331,14 @@ async function harvest() {
     // increment level if possible
     if (levels[currentLevel + 1]) {
       currentLevel = currentLevel + 1;
+      // add red after the first level
+      if (colors[0] !== 'red') {
+        colors.unshift('red');
+        // if the last color was selected, this unshift will make the next color indicator wrong, so we fix it
+        if (body.hasClass('gray')) {
+          picker.css('background-color', 'red');
+        }
+      }
     }
     sounds.success.play();
     // TODO: else: congrats
