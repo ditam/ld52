@@ -44,9 +44,6 @@ body.loading {
   cursor: url(cursor-picker.png) 8 8, pointer;
   border: 1px solid #b380340a;
 
-  /* shows the next color - set by JS, starts on green */
-  background-color: rgb(21, 152, 6);
-
   transition: top 0.7s, left 0.7s, background-color 0.1s;
 }
 
@@ -114,4 +111,104 @@ body.loading {
 .flair:hover:after {
   left: 150%;
   transition: all 250ms cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+#colorblind-toggle {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.2;
+
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  cursor: pointer;
+}
+
+#colorblind-toggle:hover {
+  opacity: 1;
+}
+
+#colorblind-toggle.off {
+  background-image: url(icon-colorblind-off.png);
+}
+#colorblind-toggle.on {
+  background-image: url(icon-colorblind-on.png);
+}
+
+#colorblind-toggle.off:hover::after {
+  color: white;
+  opacity: 0.3;
+  content: 'Colorblind palette is OFF.';
+  width: 300px;
+  position: absolute;
+  left: 38px;
+  line-height: 32px;
+  font-size: 16px;
+  font-family: sans-serif;
+}
+#colorblind-toggle.on:hover::after {
+  color: white;
+  opacity: 0.3;
+  content: 'Colorblind palette is ON.';
+  width: 300px;
+  position: absolute;
+  left: 38px;
+  line-height: 32px;
+  font-size: 16px;
+  font-family: sans-serif;
+}
+
+/*
+  UI colors are defined by color-named classes.
+  This allows decoupling the internal names from the colors,
+  and easily switching between standard and colorblind-friendly color schemes.
+*/
+
+#picker.blank, .cell.blank {
+  background-color: transparent;
+}
+
+#picker.red, .cell.red {
+  background-color: red;
+}
+#picker.green, .cell.green {
+  background-color: green;
+}
+#picker.blue, .cell.blue {
+  background-color: blue;
+}
+#picker.brown, .cell.brown {
+  background-color: sienna;
+}
+#picker.gray, .cell.gray {
+  background-color: gray;
+}
+#picker.gold, .cell.gold {
+  background-color: gold;
+}
+
+/*
+  The colorbind scheme is Paul Tol's "Bright" qualitative colour scheme:
+  https://personal.sron.nl/~pault/
+*/
+body.cb-scheme #picker.red, body.cb-scheme .cell.red {
+  background-color: #EE6677;
+}
+body.cb-scheme #picker.green, body.cb-scheme .cell.green {
+  background-color: #228833;
+}
+body.cb-scheme #picker.blue, body.cb-scheme .cell.blue {
+  background-color: #4477AA;
+}
+body.cb-scheme #picker.brown, body.cb-scheme .cell.brown {
+  background-color: #AA3377;
+}
+body.cb-scheme #picker.gray, body.cb-scheme .cell.gray {
+  background-color: #BBBBBB;
+}
+body.cb-scheme #picker.gold, body.cb-scheme .cell.gold {
+  background-color: #CCBB44;
 }

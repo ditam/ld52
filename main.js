@@ -27,13 +27,16 @@ let currentLevel = 0;
 const map = [];
 
 let body, container, picker, targetScore;
+let cbToggle;
 let bgMusic;
 const sounds = {};
 
-// These colors are available in the picker. Other colors (e.g. transparent, gold) can be valid, but not pickable.
-// TODO: keep in sync with CSS - apply CSS rules dynamically?
-// TODO: use color objects, with readable name and CSS color codes
-const colors = ['green', 'blue', 'sienna', 'gray'];
+// used only for DOM/CSS manipulation
+const _allColors = ['red', 'green', 'blue', 'brown', 'gray', 'gold', 'blank'];
+
+// These colors are available in the picker. Other colors are valid, but not pickable.
+// (NB: red is added after first level)
+const colors = ['green', 'blue', 'brown', 'gray'];
 
 function deepCopy(o) {
   return JSON.parse(JSON.stringify(o));
@@ -82,7 +85,8 @@ function switchToNextColor() {
 
   // picker shows the upcoming color
   const nextNextIndex = (nextIndex + 1) % (colors.length);
-  picker.css('background-color', colors[nextNextIndex]);
+  picker.removeClass(_allColors);
+  picker.addClass(colors[nextNextIndex]);
 
   sounds.toggle.play();
 }
@@ -118,7 +122,8 @@ function generate() {
         }
         playClickSound();
         const color = getCurrentColor();
-        cellEl.css('background-color', color);
+        cellEl.removeClass(_allColors);
+        cellEl.addClass(color);
         cell.color = color;
 
         checkComplete();
@@ -209,7 +214,8 @@ function applyMapChanges(mapChanges) {
       } else if (change.pests === true) {
         cell.color = 'red';
       }
-      cell.el.css('background-color', cell.color);
+      cell.el.removeClass(_allColors);
+      cell.el.addClass(cell.color);
     }
   }
 }
@@ -264,7 +270,7 @@ async function harvest() {
   await delay(500);
   mapChanges = getClearChangeset();
   forEachCellOfType('blue', c => {
-    if (countNeighboursOfType(c, 'sienna') < 1) {
+    if (countNeighboursOfType(c, 'brown') < 1) {
       mapChanges[c.rowIndex][c.cellIndex] = {
         deletion: true
       };
@@ -336,7 +342,8 @@ async function harvest() {
         colors.unshift('red');
         // if the last color was selected, this unshift will make the next color indicator wrong, so we fix it
         if (body.hasClass('gray')) {
-          picker.css('background-color', 'red');
+          picker.removeClass(_allColors);
+          picker.addClass('red');
         }
       }
     }
@@ -357,6 +364,8 @@ $(document).ready(function() {
   container = $('#container');
   picker = $('#picker');
   targetScore = $('#target-score');
+
+  cbToggle = $('#colorblind-toggle');
 
   picker.css({
     top: (document.documentElement.clientHeight / 2 - 13) + 'px',
@@ -380,8 +389,6 @@ $(document).ready(function() {
   // This is mostly just to unlock the fullscreen request and audio APIs via user interaction,
   // but it might also look cool, and it teaches the color pick mechanic.
   picker.one('click', () => {
-    console.log('starting');
-
     if (!DEBUG) {
       document.documentElement.requestFullscreen();
     }
@@ -389,7 +396,8 @@ $(document).ready(function() {
     bgMusic.play();
 
     body.addClass('green');
-    picker.css('background-color', 'blue');
+    picker.removeClass(_allColors);
+    picker.addClass('blue');
     generate();
 
     const verticalCenter = document.documentElement.clientHeight / 2;
@@ -413,5 +421,17 @@ $(document).ready(function() {
 
     // all subsequent clicks will just toggle color
     picker.on('click', switchToNextColor);
+  });
+
+  cbToggle.on('click', () => {
+    if (cbToggle.hasClass('off')) {
+      cbToggle.removeClass('off');
+      cbToggle.addClass('on');
+      body.addClass('cb-scheme');
+    } else {
+      cbToggle.removeClass('on');
+      cbToggle.addClass('off');
+      body.removeClass('cb-scheme');
+    }
   });
 });
